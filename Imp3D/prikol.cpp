@@ -1,6 +1,6 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
-#include "OnixEngine.h"
+#include "prikol.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -38,11 +38,11 @@ void processInput(GLFWwindow* window) {
 //Triangle
 
 float triangleVertixes[]{
-		//Vertices			//Colors
-		-0.5f,0.5f,0.0f,  1.0f,0.0f,0.0f,	0.0f, 1.0f,   //левый вверх
-		-0.5f,-0.5f,0.0f,   0.0f,1.0f,0.0f, 0.0f, 0.0f,  //левый низ
-		0.5f, 0.5f,0.0f,   0.0f,0.0f,1.0f,	1.0f, 1.0f,  //правый верх
-		0.5f, -0.5f,0.0f,   0.0f,1.0f,1.0f, 1.0f, 0.0f,  //правый низ
+		//Vertices
+		-0.5f,0.5f,0.0f,	0.0f, 1.0f,   //левый вверх
+		-0.5f,-0.5f,0.0f, 0.0f, 0.0f,  //левый низ
+		0.5f, 0.5f,0.0f, 	1.0f, 1.0f,  //правый верх
+		0.5f, -0.5f,0.0f,  1.0f, 0.0f,  //правый низ
 };
 
 float cubeVertices[] = {
@@ -138,7 +138,6 @@ int main()
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load("textures/perdak.jpg", &width, &height, &nrChannels, STBI_rgb_alpha);
-	
 
 	GLuint texture;
 	glGenTextures(1, &texture);
