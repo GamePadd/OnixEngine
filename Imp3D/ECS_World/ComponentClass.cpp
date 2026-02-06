@@ -1,12 +1,15 @@
 #include "ComponentClass.h"
 
-namespace Imp {
+#include "../ConsoleLogger.h"
 
+namespace Imp {
 	template<typename T>
 	T* Component<T>::create(entity_id entity, T component) {
 		if (last_component == MAX_ENTITIES - 1) {
+			ConsoleLogger::Instance().Log("Error, can't create Component, limit reached!", LOG::ERROR);
 			return nullptr;
 		}
+
 		++last_component;
 		uint32_t last_index = last_component;
 		components.push_back(component);
@@ -20,6 +23,8 @@ namespace Imp {
 		entity_to_component[entity_id].id = new_component_id;
 		entity_to_component[entity_id].generation = entity_generation;
 
+		ConsoleLogger::Instance().Log("Created new component for entity " + std::to_string(entity_id), LOG::INFO);
+
 		return &components[last_index];
 
 	}
@@ -30,6 +35,7 @@ namespace Imp {
 		uint8_t entity_generation = GET_GENERATION(entity);
 		generational_ptr component_pointer = entity_to_component[entity_id];
 		if (component_pointer.generation != entity_generation) {
+			ConsoleLogger::Instance().Log("Error, component not found for entity " + std::to_string(entity_id), LOG::ERROR);
 			return nullptr;
 		}
 
@@ -42,6 +48,7 @@ namespace Imp {
 		uint32_t entity_to_destroy_index = GET_INDEX(entity);
 		generational_ptr component_pointer = entity_to_component[entity_to_destroy_index];
 		if (component_pointer.generation != GET_GENERATION(entity)) {
+			ConsoleLogger::Instance().Log("Can't destroy component!", LOG::ERROR);
 			return;
 		}
 
@@ -54,6 +61,9 @@ namespace Imp {
 			component_to_entity[component_to_destroy_index].generation += 1;
 			entity_to_component[entity_to_destroy_index].id = 0;
 			entity_to_component[entity_to_destroy_index].generation += 1;
+
+			ConsoleLogger::Instance().Log("Removed component", LOG::INFO);
+
 			return;
 		}
 
@@ -63,12 +73,15 @@ namespace Imp {
 		component_to_entity[component_to_destroy_index].generation += 1;
 		entity_to_component[GET_INDEX(entity_pointer_to_swap.id)].id = component_pointer.id;
 		entity_to_component[entity_to_destroy_index].generation += 1;
+
+		ConsoleLogger::Instance().Log("Removed component", LOG::INFO);
 	}
 
 	template<typename T>
 	void Component<T>::free() {
 		if (destroy_function == NULL) {
 			components.clear();
+			ConsoleLogger::Instance().Log("All components cleared!", LOG::INFO);
 			return;
 		}
 
@@ -77,5 +90,6 @@ namespace Imp {
 			destroy_function(&components[i]);
 		}
 		components.clear();
+		ConsoleLogger::Instance().Log("All components cleared!", LOG::INFO);
 	}
 }

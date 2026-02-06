@@ -1,5 +1,7 @@
 #include "ComponentBase.h"
 
+#include "../ConsoleLogger.h"
+
 namespace Imp {
 	entity_id ComponentBase::get_entity(uint32_t component) {
 		uint32_t component_index = GET_INDEX(component);
@@ -7,6 +9,7 @@ namespace Imp {
 
 		generational_ptr entity_pointer = component_to_entity[component_index];
 		if (entity_pointer.generation != component_generation) {
+			ConsoleLogger::Instance().Log("Can't find component for entity", LOG::ERROR);
 			return 0;
 		}
 
