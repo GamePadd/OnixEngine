@@ -4,8 +4,6 @@
 #include <vector>
 #include <queue>
 
-#include "World.h"
-
 #define MAX_ENTITIES 0x00000FFFF
 
 #define CAPACITY_ENTITIES 0x00FFFFFF 
@@ -22,7 +20,4 @@ namespace Imp {
 		entity_id id;
 		uint8_t generation;
 	};
-
-	entity_id create_entity(World*);
-	void destroy_entity(World*, entity_id);
 }

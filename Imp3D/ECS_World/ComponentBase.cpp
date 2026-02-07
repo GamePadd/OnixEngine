@@ -1,5 +1,4 @@
 #include "ComponentBase.h"
-
 #include "../ConsoleLogger.h"
 
 namespace Imp {
