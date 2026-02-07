@@ -7,13 +7,15 @@
 #include <string>
 #include "ComponentBase.h"
 #include "ComponentClass.h"
+#include <functional>
 
 #include "../ConsoleLogger.h"
 
 namespace Imp {
 	class World;
 
-	typedef void(*system_t)(World* world, float delta_time);
+	//typedef void(*system_t)(World* world, float delta_time);
+	using system_t = std::function<void(World*, float)>;
 
 	class World {
 		private:
@@ -53,7 +55,7 @@ namespace Imp {
 			}
 
 			template<typename T>
-			void RegisterComponentWithDestroy(void(*destroy_function)(T*)) {
+			void RegisterComponentWithDestroy(std::function<void(T*)> DestroyFunction) {
 				std::string type_name = typeid(T).name();
 
 				if (components.find(type_name) != components.end()) {
@@ -62,7 +64,7 @@ namespace Imp {
 				}
 
 				Component<T>* new_component_type = new Component<T>();
-				new_component_type->destroy_function = destroy_function;
+				new_component_type->DestroyFunction = DestroyFunction;
 				ComponentBase* base_component_type = new_component_type;
 				components.insert({ type_name, base_component_type });
 				ConsoleLogger::Instance().Log("New component registered!", LOG::INFO);
@@ -71,7 +73,7 @@ namespace Imp {
 			template<typename T>
 			void AddComponent(entity_id entity, T component) {
 				std::string type_name = std::string(typeid(component).name());
-				Component<T>* component_type = (Component<T>*)(components[type_name]);
+				Component<T>* component_type = dynamic_cast<Component<T>*>(components[type_name]);
 				component_type->Create(entity, component);
 				//ConsoleLogger::Instance().Log("Component " + type_name + " added for entity " + std:to_string(GET_INDEX(entity)), LOG::INFO);
 			}
@@ -79,7 +81,8 @@ namespace Imp {
 			template<typename T>
 			T* GetComponent(entity_id entity) {
 				std::string type_name = std::string(typeid(T).name());
-				Component<T>* component_type = (Component<T>*)(components[type_name]);
+				//Component<T>* component_type = (Component<T>*)(components[type_name]);
+				Component<T>* component_type = dynamic_cast<Component<T>*>(components[type_name]);
 				return component_type->GetComponent(entity);
 			}
 

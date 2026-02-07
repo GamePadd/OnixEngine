@@ -54,5 +54,8 @@ int main() {
 	
 	world->DestroyEntity(entity);
 	world->~World();
+
+	int asd;
+	std::cin >> asd;
 	return 0;
 }
