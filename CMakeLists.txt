@@ -5,6 +5,7 @@ project (Imp3D)
 
 set(GLAD_DIR ${CMAKE_SOURCE_DIR}/thirdparty/GLAD)
 set(STB_DIR ${CMAKE_SOURCE_DIR}/thirdparty/STB)
+set(TINYOBJ_DIR ${CMAKE_SOURCE_DIR}/thirdparty/TinyObj)
 
 add_subdirectory("thirdparty/GLFW")
 add_subdirectory("thirdparty/GLM")

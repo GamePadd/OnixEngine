@@ -53,7 +53,7 @@ int main() {
 	std::cout << "entity x is " << std::to_string(test_ee->x) << ", y is " << std::to_string(test_ee->y) << "\n";
 	
 	world->DestroyEntity(entity);
-	world->~World();
+	delete world;
 
 	int asd;
 	std::cin >> asd;
